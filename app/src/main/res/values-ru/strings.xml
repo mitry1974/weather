@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Weather</string>
     <string name="title_cities_weather">Погода в городах</string>
     <string name="title_city_weather">Погода в городе</string>
     <string name="title_settings">Настройки</string>
