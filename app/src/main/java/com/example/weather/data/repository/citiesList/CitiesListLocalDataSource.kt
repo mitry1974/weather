@@ -10,7 +10,7 @@ class CitiesListLocalDataSource @Inject constructor(private val database: Cities
 
     suspend fun insertCitiesIntoDatabase(citiesToInsert: List<CitiesListEntity>) {
         if (citiesToInsert.isNotEmpty()) {
-            database.citiesListDao().insert(citiesToInsert)
+            database.citiesListDao().insertCities(citiesToInsert)
         }
     }
 
@@ -18,7 +18,7 @@ class CitiesListLocalDataSource @Inject constructor(private val database: Cities
 
     suspend fun updateFavoriteStatus(id: Int): CitiesListEntity? {
         val city = database.citiesListDao().cityFromId(id)
-        city?.let {
+        city.let {
             val citiesListEntity = CitiesListEntity(
                 it.id,
                 it.name,

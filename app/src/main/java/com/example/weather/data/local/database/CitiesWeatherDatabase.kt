@@ -9,6 +9,8 @@ import androidx.room.RoomDatabase
 abstract class CitiesWeatherDatabase : RoomDatabase() {
     abstract fun citiesListDao(): CitiesListDao
 
-    fun buildDatabase(context: Context): CitiesWeatherDatabase =
-        Room.databaseBuilder(context, CitiesWeatherDatabase::class.java, "Cities").build()
+    companion object {
+        fun buildDatabase(context: Context): CitiesWeatherDatabase =
+            Room.databaseBuilder(context, CitiesWeatherDatabase::class.java, "Cities").build()
+    }
 }

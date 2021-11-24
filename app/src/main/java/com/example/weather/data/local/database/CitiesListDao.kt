@@ -17,9 +17,9 @@ interface CitiesListDao {
     @Query("SELECT * FROM cities_list WHERE isFavorite = 1")
     fun favoriteCities(): LiveData<List<CitiesListEntity>>
 
-    @Update
-    fun updateCitiesListEntity(data: CitiesListEntity): Int
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(list: List<CitiesListEntity>)
+    suspend fun insertCities(list: List<CitiesListEntity>): List<Long>
+
+    @Update
+    suspend fun updateCitiesListEntity(data: CitiesListEntity): Int
 }
