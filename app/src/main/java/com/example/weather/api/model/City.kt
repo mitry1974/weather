@@ -1,8 +1,19 @@
 package com.example.weather.api.model
 
-data class City (
-    val id: Int,
+import com.google.gson.annotations.SerializedName
+
+
+data class CityDto(
+
+    @SerializedName("id")
+    val cityId: Int,
+
     val name: String,
-    val lat: Double,
-    val lon: Double
-)
+
+    val country: String,
+
+    @SerializedName("coord")
+    val coordinates: Coordinates,
+) {
+    data class Coordinates(val lat: Double, val lon: Double)
+}
