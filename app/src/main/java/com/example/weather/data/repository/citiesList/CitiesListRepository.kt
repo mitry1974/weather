@@ -1,11 +1,19 @@
 package com.example.weather.data.repository.citiesList
 
-import com.example.weather.data.local.database.CitiesListEntity
-import com.example.weather.data.local.preferences.PreferenceStorage
-import com.example.weather.api.successed
 import com.example.weather.api.Result
+import com.example.weather.api.Result.Success
+import com.example.weather.api.model.CityNameResponse
+import com.example.weather.api.model.CityResponse
+import com.example.weather.api.successed
+import com.example.weather.data.local.database.entity.CitiesListEntity
+import com.example.weather.data.local.preferences.PreferenceStorage
 import com.example.weather.util.Constants
+import com.google.gson.Gson
+import kotlinx.coroutines.*
+import java.io.InputStream
+import java.nio.charset.StandardCharsets.UTF_8
 import java.util.*
+import java.util.zip.GZIPInputStream
 import javax.inject.Inject
 
 class CitiesListRepository @Inject constructor(
@@ -13,67 +21,68 @@ class CitiesListRepository @Inject constructor(
     private val citiesListLocalDataSource: CitiesListLocalDataSource,
     private val preferenceStorage: PreferenceStorage
 ) {
-    val allCitiesList = citiesListLocalDataSource.allCitiesList
+    private fun getCitiesFromZipStream(data: InputStream): Array<CityResponse> {
+        GZIPInputStream(data).bufferedReader(UTF_8).use {
+            return Gson().fromJson(it, Array<CityResponse>::class.java)
+        }
+    }
 
-    suspend fun citiesList() {
-        //Запрашиваем данные у удаленного источника данных и выполняем проверку результата
-        when (val result = citiesListRemoteDataSource.citiesList()) {
-            //выполняем если запрос выполнен успешно
-            is Result.Success -> {
-                //проверяем есть ли в результате данные
+    fun getPagingDataSource(query: String) =
+        citiesListLocalDataSource.getCitiesListPagedFiltered(query)
+
+    suspend fun loadCitiesList() {
+        when (val result = citiesListRemoteDataSource.loadCitiesListFile()) {
+            is Success -> {
                 if (result.successed) {
-                    //получаем список сокращенных имен для избранных криптовалют
-                    //в дальнейшем с его помощью будем устанавливать
-                    //флаг в нужное положение
-                    val favoriteIds = citiesListLocalDataSource.favoriteIds()
-
-                    //создаем новый список в который положим обработанные данные
-                    val customCityList = result.data.let {
-                        it.filter { item -> item.id != 0 }
-                            .map { city ->
-                                CitiesListEntity(
-                                    city.id,
-                                    city.name,
-                                    city.lat,
-                                    city.lon,
-                                    favoriteIds.contains(city.id)
-                                )
-                            }
+                    val cities = withContext(Dispatchers.IO) {
+                        getCitiesFromZipStream(result.data.byteStream())
                     }
+                    val favoriteIds = withContext(Dispatchers.IO) {
+                        citiesListLocalDataSource.favoriteIds()
+                    }
+                    val customCitiesList = cities
+                        .filter { item -> item.id != 0 }
+                        .map { city ->
+                            CitiesListEntity(
+                                city,
+                                favoriteIds.contains(city.id)
+                            )
+                        }
 
-                    //записываем данные в базу данных
-                    citiesListLocalDataSource.insertCitiesIntoDatabase(customCityList)
-
-                    //обновляем время последнего обновления данных
-                    preferenceStorage.timeLoadedAt = Date().time
-
-                    //возвращаем результат
-                    Result.Success(true)
+                    citiesListLocalDataSource.insertCitiesIntoDatabase(customCitiesList)
+                    Success(true)
                 } else {
-                    //в остальных случаях возвращаем ошибку
                     Result.Error(Constants.GENERIC_ERROR)
                 }
             }
-            //в остальных случаях возвращаем ошибку
             else -> result as Result.Error
+        }
+    }
+
+    suspend fun getCityNameByCoordinates(lat: Double, lon: Double): Result<String> {
+        val result = citiesListRemoteDataSource.loadCityNamesByCoordinates(lat, lon)
+        return when {
+            result is Result.Error -> result
+            result is Success<*> && !result.successed -> Result.Error(Constants.GENERIC_ERROR)
+            else -> {
+                val citiesNames: List<CityNameResponse> = (result as Success).data
+                val name = if (citiesNames.size == 1) citiesNames[0].name else ""
+                Success(name)
+            }
         }
     }
 
     suspend fun updateFavoriteStatus(id: Int): Result<CitiesListEntity> {
         val result = citiesListLocalDataSource.updateFavoriteStatus(id)
         return result?.let {
-            Result.Success(it)
+            Success(it)
         } ?: Result.Error(Constants.GENERIC_ERROR)
     }
 
-    fun loadData(): Boolean {
-        //получаем время последней загрузки данных
-        val lastLoadedTime = preferenceStorage.timeLoadedAt
-        //получаем текущее время
-        val currentTime = Date().time
-        //проверем прошло ли 20 секунд (20 * 1000
-        //где 20 - это количество секунд,
-        //а 1000 это количество миллисекунд в одной секунде)
-        return currentTime - lastLoadedTime > 20 * 1000
+    fun isFirstRun(): Boolean {
+        val result = preferenceStorage.isFirstRun
+        preferenceStorage.isFirstRun = false
+        return result
     }
+
 }

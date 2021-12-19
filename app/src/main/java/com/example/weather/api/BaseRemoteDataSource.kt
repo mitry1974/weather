@@ -5,7 +5,6 @@ import com.example.weather.util.Constants
 import com.google.gson.Gson
 import okhttp3.ResponseBody
 import retrofit2.Response
-import kotlin.Exception
 
 abstract class BaseRemoteDataSource {
     suspend fun <T> getResult(call: suspend () -> Response<T>): Result<T> {

@@ -1,6 +1,24 @@
 <resources>
     <string name="app_name">Weather</string>
-    <string name="title_cities_weather">Погода в городах</string>
-    <string name="title_city_weather">Погода в городе</string>
+    <string name="title_cities_list">Cities list</string>
+    <string name="title_favorites_weather">Favorite cities</string>
     <string name="title_settings">Настройки</string>
+    <string name="city_location_hint">Месторасположение</string>
+    <string name="find_location_by_gps">Найти место по GPS координатам</string>
+    <string name="cant_load_cities_list">Не удалось получить список городов</string>
+    <string name="find_location">Find location</string>
+    <string name="title_activity_test">TestActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_forecast_tabed">ForecastTabedActivity</string>
+    <string name="tab_text_1">3 days forecast</string>
+    <string name="tab_text_2">5 days forecast</string>
+    <string name="humidity">Humidity:</string>
+    <string name="weather_item_wind">Wind:</string>
 </resources>

@@ -1,12 +1,14 @@
 package com.example.weather.data.repository.citiesList
 
-import androidx.lifecycle.LiveData
-import com.example.weather.data.local.database.CitiesListEntity
+import androidx.paging.PagingSource
+import com.example.weather.data.local.database.entity.CitiesListEntity
 import com.example.weather.data.local.database.CitiesWeatherDatabase
+import com.example.weather.data.local.database.entity.Coordinates
 import javax.inject.Inject
 
 class CitiesListLocalDataSource @Inject constructor(private val database: CitiesWeatherDatabase) {
-    val allCitiesList: LiveData<List<CitiesListEntity>> = database.citiesListDao().citiesList()
+    fun getCitiesListPagedFiltered(query: String): PagingSource<Int, CitiesListEntity> =
+        database.citiesListDao().citiesListPagedFiltered("%$query%")
 
     suspend fun insertCitiesIntoDatabase(citiesToInsert: List<CitiesListEntity>) {
         if (citiesToInsert.isNotEmpty()) {
@@ -17,19 +19,20 @@ class CitiesListLocalDataSource @Inject constructor(private val database: Cities
     suspend fun favoriteIds(): List<Int> = database.citiesListDao().favoriteIds()
 
     suspend fun updateFavoriteStatus(id: Int): CitiesListEntity? {
-        val city = database.citiesListDao().cityFromId(id)
-        city.let {
-            val citiesListEntity = CitiesListEntity(
-                it.id,
-                it.name,
-                it.lat,
-                it.lon
-            )
+        val city = database.citiesListDao().cityById(id)
 
-            if (database.citiesListDao().updateCitiesListEntity(citiesListEntity) > 0) {
-                return citiesListEntity
-            }
-        }
-        return null
+        val updatedCity = CitiesListEntity(city, city.isFavorite.not())
+
+        return if (database.citiesListDao()
+                .updateCitiesListEntity(updatedCity) > 0
+        ) updatedCity else null
+    }
+
+    suspend fun getCityById(cityId: Int): CitiesListEntity =
+        database.citiesListDao().cityById(cityId)
+
+    fun getCityCoordinatesById(cityId: Int): Coordinates {
+        val entity = database.citiesListDao().cityById(cityId)
+        return Coordinates(entity.lat ?: 0.0, entity.lon ?: 0.0)
     }
 }

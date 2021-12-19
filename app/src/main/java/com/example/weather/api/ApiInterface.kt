@@ -1,43 +1,56 @@
 package com.example.weather.api
 
-import com.example.weather.api.model.City
-import com.example.weather.api.model.Forecast
-import com.example.weather.api.model.HistoricalWeatherResponse
+import com.example.weather.api.model.*
+import com.example.weather.util.Constants
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Streaming
 
 interface ApiInterface {
-    @GET("http://bulk.openweathermap.org/sample/city.list.json.gz")
-    suspend fun citiesList(): Response<List<City>>
+    @Streaming
+    @GET("https://bulk.openweathermap.org/sample/city.list.json.gz")
+    suspend fun getCitiesListFile(): Response<ResponseBody>
 
-    // "https://api.openweathermap.org/data/2.5/weather?q=Moscow&appid=08733d4c33fc2c5ef77ef3273cc7a148"
+    @GET("https://api.openweathermap.org/geo/1.0/reverse")
+    suspend fun getCityNamesByCoordinates(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") appid: String = Constants.WEATHER_API_KEY
+    ): Response<List<CityNameResponse>>
 
-    // Get city weather
-    @GET("weather/{id}")
-    suspend fun cityWeather(
-        @Query("id") id: String
-    ): Response<City>
+    @GET("weather")
+    suspend fun getCityWeatherById(
+        @Query("id") id: Int,
+        @Query("units") units: String = Constants.WEATHER_API_UNITS,
+        @Query("appid") appid: String = Constants.WEATHER_API_KEY
+    ): Response<CityWeatherResponse>
 
-    // Get city forecast 2 days
-    // https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+    @GET("https://openweathermap.org/img/wn/{icon}@2x.png")
+    suspend fun getCityWeatherIcon(
+        @Path("icon")
+        icon: String
+    ): Response<ResponseBody>
+
     @GET("onecall")
-    suspend fun forecast(
-        @Query("lat") lat: String,
-        @Query("lon") lon: String,
-        @Query("lang") lang: String,
-        @Query("appid") appid: String,
-        ): Response<Forecast>
+    suspend fun getCityForecast(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("units") units: String = Constants.WEATHER_API_UNITS,
+        @Query("exclude") exclude: String = "weather,minutely,hourly",
+        @Query("appid") appid: String = Constants.WEATHER_API_KEY
+    ): Response<CityForecastResponse>
 
-    // Get city historical data
-    // https://api.openweathermap.org/data/2.5/onecall/timemachine?lat={lat}&lon={lon}&dt={time}&appid={API key}
-    @GET("onecall/timemachine")
-    suspend fun historicalWeather(
-        @Query("lat") lat: String,
-        @Query("lon") lon: String,
-        @Query("dt") dt: String,
-        @Query("lang") lang: String,
-        @Query("appid") appid: String,
-    ): Response<HistoricalWeatherResponse>
+//    // Get city historical data
+//    // https://api.openweathermap.org/data/2.5/onecall/timemachine?lat={lat}&lon={lon}&dt={time}&appid={API key}
+//    @GET("onecall/timemachine")
+//    suspend fun historicalWeather(
+//        @Query("lat") lat: String,
+//        @Query("lon") lon: String,
+//        @Query("dt") dt: String,
+//        @Query("lang") lang: String,
+//        @Query("appid") appid: String,
+//    ): Response<HistoricalWeatherResponse>
 }

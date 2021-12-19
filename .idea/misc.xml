@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/dev/android/Weather/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.21979166666666666" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/drawable/ic_baseline_cloud.xml" value="0.3723076923076923" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/drawable/ic_baseline_favorite.xml" value="0.3723076923076923" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/drawable/ic_baseline_list.xml" value="0.21614583333333334" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/drawable/ic_temperature_background.xml" value="0.37447916666666664" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/drawable/ic_wind_foreground.xml" value="0.19947916666666668" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/activity_forecast.xml" value="0.25" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/activity_forecast_tabed.xml" value="0.35833333333333334" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/activity_main.xml" value="0.3619791666666667" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/activity_test.xml" value="0.3619791666666667" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/fragment_cities_list.xml" value="0.3619791666666667" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/fragment_city_weather.xml" value="0.3619791666666667" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/fragment_favorites.xml" value="0.33" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/fragment_find_city.xml" value="0.2911458333333333" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/fragment_first.xml" value="0.3619791666666667" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/fragment_forecast_tabed.xml" value="0.35833333333333334" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/fragment_weather_settings.xml" value="0.3619791666666667" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/item_cities_list.xml" value="0.29375" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/item_cities_list_new.xml" value="0.35833333333333334" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/item_cities_weather_list.xml" value="0.2916666666666667" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/item_forecast_list.xml" value="0.24479166666666666" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/item_forecast_row.xml" value="0.24479166666666666" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/item_weather_element_list.xml" value="0.24479166666666666" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/main_fragment.xml" value="0.3619791666666667" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/layout/test_activity.xml" value="0.3619791666666667" />
+        <entry key="..\:/dev/android/Weather/app/src/main/res/menu/main_bottom_menu.xml" value="0.3619791666666667" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

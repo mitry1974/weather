@@ -5,14 +5,10 @@
     app:startDestination="@id/navigation_favorites">
     <fragment
         android:id="@+id/navigation_favorites"
-        android:name="com.example.weather.CitiesListFragment"
-        android:label="@string/title_cities_weather" />
+        android:name="com.example.weather.ui.main.favorites.newVersion.FavoritesCityNewFragment"
+        android:label="@string/title_favorites_weather" />
     <fragment
-        android:id="@+id/navigation_city"
-        android:name="com.example.weather.CityWetherFragment"
-        android:label="@string/title_city_weather" />
-    <fragment
-        android:id="@+id/navigation_settings"
-        android:name="com.example.weather.WeatherSettingsFragment"
-        android:label="@string/title_settings" />
+        android:id="@+id/navigation_find_location"
+        android:name="com.example.weather.ui.main.findCity.FindCityFragment"
+        android:label="@string/find_location" />
 </navigation>
