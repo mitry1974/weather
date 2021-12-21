@@ -5,5 +5,6 @@
     <string name="cant_load_cities_list">Не удалось получить список городов</string>
     <string name="find_location">Find location</string>
     <string name="URL_ICONS" translatable="false">https://openweathermap.org/img/wn/{icon}@2x.png</string>
+    <string name="refresh_forecast_description">Обновить прогноз погоды</string>
     <!-- Strings used for fragments for navigation -->
 </resources>

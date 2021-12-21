@@ -1,10 +1,12 @@
 package com.example.weather.ui.main.forecast
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weather.R
 import com.example.weather.databinding.ActivityForecastBinding
 import com.example.weather.ui.adapters.ForecastAdapterVertical
 import com.example.weather.util.Constants
@@ -40,17 +42,24 @@ class ForecastActivity: AppCompatActivity() {
         }
         viewModel.setForecastInfo(cityId)
 
+        binding.toolbar.inflateMenu(R.menu.forecast_menu);
         setSupportActionBar(binding.toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        supportActionBar?.title = "Weather for $cityName"
+        supportActionBar?.title = "Forecast for $cityName"
 
         initializeView()
         observeViewModel()
 
         viewModel.getForecast()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.forecast_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+
     }
 
     private fun observeViewModel() {
@@ -71,6 +80,7 @@ class ForecastActivity: AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
+            R.id.action_refresh_forecast -> viewModel.getForecast()
             else -> return super.onOptionsItemSelected(item)
         }
         return true

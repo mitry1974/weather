@@ -5,4 +5,5 @@
     <string name="find_location_by_gps">Найти место по GPS координатам</string>
     <string name="cant_load_cities_list">Не удалось получить список городов</string>
     <string name="find_location">Найти месторасположение</string>
+    <string name="refresh_forecast_description">Обновить прогноз погоды</string>
 </resources>
