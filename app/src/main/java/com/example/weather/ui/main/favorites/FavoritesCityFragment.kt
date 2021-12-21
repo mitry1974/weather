@@ -7,21 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weather.ui.common.MainNavigationFragment
 import com.example.weather.databinding.FragmentFavoritesBinding
-import com.example.weather.ui.adapters.CitiesWeatherListAdapter
 import com.example.weather.ui.adapters.OnItemClickCallback
-import com.example.weather.ui.main.forecast.ForecastTabedActivity
+import com.example.weather.ui.common.MainNavigationFragment
+import com.example.weather.ui.adapters.WeatherCitiesAdapterVertical
+import com.example.weather.ui.main.forecast.ForecastActivity
 import com.example.weather.util.Constants
 import com.example.weather.util.doOnChange
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavoriteCitiesFragment : MainNavigationFragment(), OnItemClickCallback {
+class FavoritesCityFragment : MainNavigationFragment(), OnItemClickCallback {
     private val viewModel: FavoriteViewModel by viewModels()
     private lateinit var binding: FragmentFavoritesBinding
 
-    private val citiesWeatherListAdapter = CitiesWeatherListAdapter(this)
+    private val citiesWeatherListAdapter = WeatherCitiesAdapterVertical(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,7 +31,7 @@ class FavoriteCitiesFragment : MainNavigationFragment(), OnItemClickCallback {
         binding = FragmentFavoritesBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
-                viewModel = this@FavoriteCitiesFragment.viewModel
+                viewModel = this@FavoritesCityFragment.viewModel
             }
         observeViewModel()
         return binding.root
@@ -63,7 +63,6 @@ class FavoriteCitiesFragment : MainNavigationFragment(), OnItemClickCallback {
             it.cityId?.let {
                 viewModel.updateFavoriteStatus(it)
             }
-
         }
     }
 
@@ -74,7 +73,7 @@ class FavoriteCitiesFragment : MainNavigationFragment(), OnItemClickCallback {
     override fun onItemClick(cityName: String, cityID: Int) {
         requireActivity().run {
             startActivity(
-                Intent(this, ForecastTabedActivity::class.java)
+                Intent(this, ForecastActivity::class.java)
                     .apply {
                         putExtra(Constants.EXTRA_CITY_NAME, cityName)
                         putExtra(Constants.EXTRA_CITY_ID, cityID)
@@ -82,4 +81,5 @@ class FavoriteCitiesFragment : MainNavigationFragment(), OnItemClickCallback {
             )
         }
     }
+
 }

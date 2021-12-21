@@ -12,7 +12,7 @@ import com.example.weather.ui.adapters.OnItemClickCallback
 import com.example.weather.ui.common.DiffCallBack
 import com.example.weather.util.ImageLoader
 
-class WeatherCitiesAdapterVertical(private val onItemClickCallback: OnItemClickCallback) :
+class WeatherCitiesAdapterVertical(private val onItemClickCallback: OnItemClickCallback? = null) :
     RecyclerView.Adapter<WeatherCitiesAdapterVertical.WeatherViewHolder>() {
     private var mDiffer = AsyncListDiffer(this, DiffCallBack<CityWeatherEntity>())
 
@@ -47,7 +47,7 @@ class WeatherCitiesAdapterVertical(private val onItemClickCallback: OnItemClickC
 
     class WeatherViewHolder(private val binding: ItemCitiesListNewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(cityWeather: CityWeatherEntity, onItemClickCallback: OnItemClickCallback) {
+        fun bind(cityWeather: CityWeatherEntity, onItemClickCallback: OnItemClickCallback?) {
             binding.cityWeatherRecyclerView.apply {
 
                 val horizontalAdapter = WeatherItemsAdapterHorizontal()
@@ -67,19 +67,19 @@ class WeatherCitiesAdapterVertical(private val onItemClickCallback: OnItemClickC
             binding.weatherName.text = cityWeather.weatherName
             binding.caption.text = cityWeather.fullCityName
 
-            itemView.setOnClickListener {
-                cityWeather.cityId?.let {
-                    onItemClickCallback.onItemClick(cityWeather.name ?: "", it)
+
+            onItemClickCallback?.let {
+                itemView.setOnClickListener {
+                    cityWeather.cityId?.let {
+                        onItemClickCallback.onItemClick(cityWeather.name ?: "", it)
+                    }
                 }
-
-            }
-
-            binding.cityItemFavoriteImageView.setOnClickListener {
-                cityWeather.cityId?.let {
-                    onItemClickCallback.onFavoriteClick(it)
+                binding.cityItemFavoriteImageView.setOnClickListener {
+                    cityWeather.cityId?.let {
+                        onItemClickCallback.onFavoriteClick(it)
+                    }
                 }
             }
-
         }
     }
 
