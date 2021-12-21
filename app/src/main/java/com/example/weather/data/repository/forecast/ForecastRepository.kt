@@ -5,6 +5,7 @@ import com.example.weather.api.model.CityForecastResponse
 import com.example.weather.api.successed
 import com.example.weather.data.local.database.CityForecastEntity
 import com.example.weather.data.local.database.ForecastRow
+import com.example.weather.data.local.iconsStorage.WeatherIconsStorage
 import com.example.weather.data.repository.citiesList.CitiesListLocalDataSource
 import com.example.weather.data.repository.citiesWeather.WeatherRemoteDataSource
 import java.text.SimpleDateFormat
@@ -16,13 +17,14 @@ class ForecastRepository @Inject constructor(
     private val remoteCityWeatherDataSource: WeatherRemoteDataSource,
     private val localCityForecastDataSource: ForecastLocalDataSource,
     private val citiesListLocalDataSource: CitiesListLocalDataSource,
-) {
+    private val iconsStorage: WeatherIconsStorage,
+    ) {
     suspend fun insertCityForecast(cityForecast: CityForecastEntity) {
         val data = localCityForecastDataSource.insertCityForecast(cityForecast)
         Result.Success(data)
     }
 
-    private fun forecastResponseToEntity(
+    private suspend fun forecastResponseToEntity(
         cityId: Int,
         response: CityForecastResponse
     ): CityForecastEntity {
@@ -34,10 +36,14 @@ class ForecastRepository @Inject constructor(
             forecastRows.add(
                 ForecastRow(
                     main = item.weather?.first()?.main,
-                    icon = item.weather?.first()?.icon,
-                    date = forecastDate
-//                    temp = item.main?.temp,
-//                    humidity = item.
+                    date = forecastDate,
+                    weatherName = item.weather?.first()?.description,
+                    temp = item.temp?.day,
+                    pressure = item.pressure,
+                    humidity = item.humidity,
+                    clouds   = item.clouds,
+                    wind = item.wind_speed,
+                    iconFileName = iconsStorage.getWeatherIconFileName(item.weather?.first()?.icon),
                 )
             )
         }

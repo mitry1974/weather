@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Погода</string>
-    <string name="title_cities_list">Список городов</string>
     <string name="title_favorites_weather">Погода в городах</string>
-    <string name="title_settings">Настройки</string>
-    <string name="city_location_hint">Месторасположение</string>
     <string name="find_location_by_gps">Найти место по GPS координатам</string>
     <string name="cant_load_cities_list">Не удалось получить список городов</string>
     <string name="find_location">Найти месторасположение</string>
-    <string name="humidity">Humidity:</string>
-    <string name="weather_item_wind">Wind:</string>
 </resources>

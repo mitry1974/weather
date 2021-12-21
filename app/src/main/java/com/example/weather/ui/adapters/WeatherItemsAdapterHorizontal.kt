@@ -1,24 +1,23 @@
-package com.example.weather.ui.main.favorites.newVersion
+package com.example.weather.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weather.data.local.database.entity.WeatherItem
-import com.example.weather.databinding.ItemCitiesWeatherListBinding
+import com.example.weather.data.local.database.entity.BaseWeatherInfo
 import com.example.weather.databinding.ItemWeatherElementListBinding
 import com.example.weather.ui.common.DiffCallBack
 
 class WeatherItemsAdapterHorizontal:
     RecyclerView.Adapter<WeatherItemsAdapterHorizontal.WeatherItemsViewHolder>() {
-    private var mDiffer = AsyncListDiffer(this, DiffCallBack<WeatherItem>())
+    private var mDiffer = AsyncListDiffer(this, DiffCallBack<BaseWeatherInfo.WeatherItem>())
 
-    fun setDataList(dataList: List<WeatherItem?>) {
+    fun setDataList(dataList: List<BaseWeatherInfo.WeatherItem?>) {
         mDiffer.submitList(dataList)
     }
 
     class WeatherItemsViewHolder(private val binding: ItemWeatherElementListBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(itemData: WeatherItem) {
+        fun bind(itemData: BaseWeatherInfo.WeatherItem) {
             binding.weatherItemCaption.text = itemData.key
             binding.weatherItemValue.text = itemData.value
             binding.weatherElementImage.setImageResource(itemData.icon)

@@ -15,11 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Weather">
         <activity
-            android:name=".ui.main.forecast.ForecastTabedActivity"
-            android:exported="false"
-            android:label="@string/title_activity_forecast_tabed"
-            android:theme="@style/Theme.Weather.NoActionBar" />
-        <activity
             android:name=".ui.main.MainActivity"
             android:exported="true">
             <intent-filter>

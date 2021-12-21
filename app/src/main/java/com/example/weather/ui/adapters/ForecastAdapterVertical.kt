@@ -1,31 +1,23 @@
-package com.example.weather.ui.main.favorites.newVersion
+package com.example.weather.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weather.R
-import com.example.weather.data.local.database.entity.CityWeatherEntity
+import com.example.weather.data.local.database.ForecastRow
 import com.example.weather.databinding.ItemCitiesListNewBinding
-import com.example.weather.ui.adapters.OnItemClickCallback
 import com.example.weather.ui.common.DiffCallBack
 import com.example.weather.util.ImageLoader
 
-class WeatherCitiesAdapterVertical(private val onItemClickCallback: OnItemClickCallback? = null) :
-    RecyclerView.Adapter<WeatherCitiesAdapterVertical.WeatherViewHolder>() {
-    private var mDiffer = AsyncListDiffer(this, DiffCallBack<CityWeatherEntity>())
+class ForecastAdapterVertical :
+    RecyclerView.Adapter<ForecastAdapterVertical.WeatherViewHolder>() {
+    private var mDiffer = AsyncListDiffer(this, DiffCallBack<ForecastRow>())
 
-    fun setDataList(dataList: List<CityWeatherEntity>) {
+    fun setDataList(dataList: List<ForecastRow>) {
         mDiffer.submitList(dataList)
-    }
-
-    fun addDataList(dataList: List<CityWeatherEntity>) {
-        mDiffer.currentList.addAll(dataList)
-    }
-
-    fun clearDataList() {
-        mDiffer.currentList.clear()
     }
 
     override fun getItemCount(): Int = mDiffer.currentList.size
@@ -42,16 +34,16 @@ class WeatherCitiesAdapterVertical(private val onItemClickCallback: OnItemClickC
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
         val item = mDiffer.currentList[position]
-        holder.bind(item, onItemClickCallback)
+        holder.bind(item)
     }
 
     class WeatherViewHolder(private val binding: ItemCitiesListNewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(cityWeather: CityWeatherEntity, onItemClickCallback: OnItemClickCallback?) {
+        fun bind(forecastRow: ForecastRow) {
             binding.cityWeatherRecyclerView.apply {
 
                 val horizontalAdapter = WeatherItemsAdapterHorizontal()
-                horizontalAdapter.setDataList(cityWeather.propertiesList)
+                horizontalAdapter.setDataList(forecastRow.propertiesList)
 
                 adapter = horizontalAdapter
                 layoutManager = LinearLayoutManager(
@@ -61,27 +53,11 @@ class WeatherCitiesAdapterVertical(private val onItemClickCallback: OnItemClickC
                 )
             }
 
-            binding.cityItemFavoriteImageView.setImageResource(R.drawable.ic_baseline_favorite)
+            binding.cityItemFavoriteImageView.visibility = GONE
 
-            ImageLoader.loadImage(binding.cityWeatherImageView, cityWeather.iconFileName ?: "")
-            binding.weatherName.text = cityWeather.weatherName
-            binding.caption.text = cityWeather.fullCityName
-
-            onItemClickCallback?.let {
-                itemView.setOnClickListener {
-                    cityWeather.cityId?.let {
-                        onItemClickCallback.onItemClick(cityWeather.name ?: "", it)
-                    }
-
-                }
-
-                binding.cityItemFavoriteImageView.setOnClickListener {
-                    cityWeather.cityId?.let {
-                        onItemClickCallback.onFavoriteClick(it)
-                    }
-                }
-            }
+            ImageLoader.loadImage(binding.cityWeatherImageView, forecastRow.iconFileName ?: "")
+            binding.weatherName.text = forecastRow.weatherName
+            binding.caption.text = forecastRow.date
         }
     }
-
 }

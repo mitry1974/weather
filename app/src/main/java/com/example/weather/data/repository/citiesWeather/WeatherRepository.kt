@@ -1,11 +1,10 @@
 package com.example.weather.data.repository.citiesWeather
 
 import com.example.weather.api.Result
-import com.example.weather.api.successed
 import com.example.weather.data.local.database.entity.CityWeatherEntity
+import com.example.weather.data.local.iconsStorage.WeatherIconsStorage
 import com.example.weather.data.local.preferences.PreferenceStorage
 import com.example.weather.data.repository.citiesList.CitiesListLocalDataSource
-import com.example.weather.util.Constants
 import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(
@@ -33,30 +32,11 @@ class WeatherRepository @Inject constructor(
             .map { remoteCityWeatherDataSource.loadCityWeatherById(it) }
             .map {
                 val cityResponse = (it as Result.Success).data
-                val iconFileName = getCityWeatherIcon(cityResponse.weather?.get(0)?.icon)
+                val iconFileName =
+                    iconsStorage.getWeatherIconFileName(cityResponse.weather?.get(0)?.icon)
                 CityWeatherEntity(cityResponse, iconFileName)
             }
 
-
-    private suspend fun getCityWeatherIcon(icon: String?): String? {
-        if(icon.isNullOrBlank()) return ""
-
-        var iconFileName = iconsStorage.getIconFileName(icon)
-        if (iconFileName.isNullOrBlank()) {
-            when (val result = remoteCityWeatherDataSource.loadCityWeatherIcon(icon)) {
-                is Result.Success -> {
-                    if (result.successed) {
-                        iconsStorage.saveIcon(icon, result.data.bytes())
-                        iconFileName = iconsStorage.getIconFileName(icon)
-                    } else {
-                        Result.Error(Constants.GENERIC_ERROR)
-                    }
-                }
-                else -> result as Result.Error
-            }
-        }
-        return iconFileName
-    }
 
     private fun isNeedLoadData(): Boolean {
         return true

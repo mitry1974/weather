@@ -43,18 +43,20 @@ class FindCityViewModel @Inject constructor(
 
     fun updateFavoriteStatus(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = citiesListRepository.updateFavoriteStatus(id)) {
-                is Result.Success -> _cityOnChange.postValue(result.data)
-                is Result.Error -> _toastError.postValue(result.message)
+            val result = citiesListRepository.updateFavoriteStatus(id)
+            when {
+                result is Result.Success -> _cityOnChange.postValue(result.data)
+                result is Result.Error -> _toastError.postValue(result.message)
             }
         }
     }
 
     fun getLocationByCoordinates(lat: Double, lon: Double) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = citiesListRepository.getCityNameByCoordinates(lat, lon)) {
-                is Result.Success -> _homeCityName.postValue(result.data)
-                is Result.Error -> _toastError.postValue(result.message)
+            val result = citiesListRepository.getCityNameByCoordinates(lat, lon)
+            when {
+                result is Result.Success -> _homeCityName.postValue(result.data)
+                result is Result.Error -> _toastError.postValue(result.message)
             }
         }
     }

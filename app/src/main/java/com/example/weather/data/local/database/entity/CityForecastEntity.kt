@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.example.weather.data.local.database.entity.BaseWeatherInfo
 
 @Entity(tableName = "forecast_city_table")
 @TypeConverters(Converters::class)
@@ -28,32 +29,21 @@ data class CityForecastEntity(
     val forecastRows: List<ForecastRow>? = null,
 )
 
-
-data class ForecastRow(
-
+class ForecastRow(
     @ColumnInfo(name = "main")
     val main: String? = null,
-
-    @ColumnInfo(name = "icon")
-    val icon: String? = null,
 
     @ColumnInfo(name = "time")
     val date: String? = null,
 
-    @ColumnInfo(name = "temp")
-    val temp: Double? = null,
+    weatherName: String?,
+    temp: Double?,
+    pressure: Int?,
+    humidity: Int?,
+    clouds: Int?,
+    wind: Double?,
+    iconFileName: String?
 
-    @ColumnInfo(name = "pressure")
-    val pressure: Int? = null,
+): BaseWeatherInfo(weatherName, temp, pressure, humidity, clouds, wind, iconFileName)
 
-    @ColumnInfo(name = "humidity")
-    val humidity: Int? = null,
-
-    @ColumnInfo(name = "clouds")
-    val clouds: Int? = null,
-
-    @ColumnInfo(name = "wind")
-    val wind: Double? = null
-
-)
 

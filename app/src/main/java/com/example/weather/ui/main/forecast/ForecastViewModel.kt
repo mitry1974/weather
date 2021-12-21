@@ -13,10 +13,10 @@ class ForecastViewModel @Inject constructor(
     private val forecastRepository: ForecastRepository
 
 ) : ViewModel() {
-    private var forecastDays: Int? = 0
     private var cityId: Int? = 0
-    private val _index = MutableLiveData<Int>()
+
     var forecastData = MutableLiveData<CityForecastEntity>()
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading = _isLoading
 
@@ -31,16 +31,7 @@ class ForecastViewModel @Inject constructor(
         }
     }
 
-    val text: LiveData<String> = Transformations.map(_index) {
-        "Hello world from section: $it\n forecast for city with id: $cityId for $forecastDays days"
-    }
-
-    fun setIndex(index: Int) {
-        _index.value = index
-    }
-
-    fun setForecastInfo(cityId: Int?, forecastDays: Int?) {
+    fun setForecastInfo(cityId: Int?) {
         this.cityId = cityId
-        this.forecastDays = forecastDays
     }
 }

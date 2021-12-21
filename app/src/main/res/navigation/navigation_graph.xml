@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/navigation_graph"
     app:startDestination="@id/navigation_favorites">
     <fragment
         android:id="@+id/navigation_favorites"
-        android:name="com.example.weather.ui.main.favorites.newVersion.FavoritesCityNewFragment"
+        android:name="com.example.weather.ui.main.favorites.FavoritesCityFragment"
         android:label="@string/title_favorites_weather" />
     <fragment
         android:id="@+id/navigation_find_location"

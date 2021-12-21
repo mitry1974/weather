@@ -17,7 +17,7 @@ class CitiesListPagingAdapter(private val onItemClickCallback: OnItemClickCallba
         RecyclerView.ViewHolder(binding.root) {
         fun bind(city: CitiesListEntity, onItemClickCallback: OnItemClickCallback) {
             binding.cityNameItemTextView.text = city.name
-            binding.cityCountryTextView.text = city.country
+            binding.cityCountryItemTextView.text = city.country
             binding.coordinatesLat.text = city.lat.toString()
             binding.coordinatesLon.text = city.lon.toString()
 

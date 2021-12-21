@@ -33,11 +33,17 @@ data class ListItem(
     @field:SerializedName("clouds")
     val clouds: Int? = null,
 
-    @field:SerializedName("wind")
-    val wind_speen: Double? = null,
+    @field:SerializedName("wind_speed")
+    val wind_speed: Double? = null,
 
-    @field:SerializedName("rain")
-    val rain: Double? = null
+    @field:SerializedName("humidity")
+    val humidity: Int? = null,
+
+    @field:SerializedName("pressure")
+    val pressure: Int? = null,
+
+    @field:SerializedName("temp")
+    val temp: Temp? = null,
 )
 
 data class WeatherItem(
@@ -176,4 +182,9 @@ data class Coord(
 
     @field:SerializedName("lat")
     val lat: Double? = null
+)
+
+data class Temp(
+    @field:SerializedName("day")
+    val day: Double? = null,
 )

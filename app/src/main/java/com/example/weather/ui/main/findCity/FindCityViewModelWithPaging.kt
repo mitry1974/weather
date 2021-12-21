@@ -1,5 +1,6 @@
 package com.example.weather.ui.main.findCity
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.example.weather.api.Result
+import com.example.weather.api.successed
 import com.example.weather.data.local.database.entity.CitiesListEntity
 import com.example.weather.data.repository.citiesList.CitiesListRepository
 import com.example.weather.data.repository.location.LocationRepository
@@ -47,20 +49,24 @@ class FindCityViewModelWithPaging @Inject constructor(
 
     val location = locationRepository.currentLocation
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun updateFavoriteStatus(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = citiesListRepository.updateFavoriteStatus(id)) {
-                is Result.Success -> _cityOnChange.postValue(result.data)
-                is Result.Error -> _toastError.postValue(result.message)
+            val result = citiesListRepository.updateFavoriteStatus(id)
+            when {
+                result is Result.Success && result.successed -> _cityOnChange.postValue(result.data)
+                result is Result.Error -> _toastError.postValue(result.message)
             }
         }
     }
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun getLocationByCoordinates(lat: Double, lon: Double) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = citiesListRepository.getCityNameByCoordinates(lat, lon)) {
-                is Result.Success -> _homeCityName.postValue(result.data)
-                is Result.Error -> _toastError.postValue(result.message)
+            val result = citiesListRepository.getCityNameByCoordinates(lat, lon)
+            when {
+                result is Result.Success && result.successed -> _homeCityName.postValue(result.data)
+                result is Result.Error -> _toastError.postValue(result.message)
             }
         }
     }

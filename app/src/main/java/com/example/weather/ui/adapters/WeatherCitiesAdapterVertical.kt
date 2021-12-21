@@ -1,4 +1,4 @@
-package com.example.weather.ui.main.favorites.newVersion
+package com.example.weather.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weather.R
 import com.example.weather.data.local.database.entity.CityWeatherEntity
 import com.example.weather.databinding.ItemCitiesListNewBinding
-import com.example.weather.ui.adapters.OnItemClickCallback
 import com.example.weather.ui.common.DiffCallBack
 import com.example.weather.util.ImageLoader
 
@@ -18,14 +17,6 @@ class WeatherCitiesAdapterVertical(private val onItemClickCallback: OnItemClickC
 
     fun setDataList(dataList: List<CityWeatherEntity>) {
         mDiffer.submitList(dataList)
-    }
-
-    fun addDataList(dataList: List<CityWeatherEntity>) {
-        mDiffer.currentList.addAll(dataList)
-    }
-
-    fun clearDataList() {
-        mDiffer.currentList.clear()
     }
 
     override fun getItemCount(): Int = mDiffer.currentList.size
@@ -67,13 +58,14 @@ class WeatherCitiesAdapterVertical(private val onItemClickCallback: OnItemClickC
             binding.weatherName.text = cityWeather.weatherName
             binding.caption.text = cityWeather.fullCityName
 
-
             onItemClickCallback?.let {
                 itemView.setOnClickListener {
                     cityWeather.cityId?.let {
                         onItemClickCallback.onItemClick(cityWeather.name ?: "", it)
                     }
+
                 }
+
                 binding.cityItemFavoriteImageView.setOnClickListener {
                     cityWeather.cityId?.let {
                         onItemClickCallback.onFavoriteClick(it)

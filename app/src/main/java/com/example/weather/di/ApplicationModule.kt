@@ -5,7 +5,7 @@ import com.example.weather.api.ApiInterface
 import com.example.weather.data.local.database.CitiesWeatherDatabase
 import com.example.weather.data.local.preferences.PreferenceStorage
 import com.example.weather.data.local.preferences.SharedPreferenceStorage
-import com.example.weather.data.repository.citiesWeather.WeatherIconsStorage
+import com.example.weather.data.local.iconsStorage.WeatherIconsStorage
 import com.example.weather.util.Constants
 import com.example.weather.util.Constants.ICONS_PATH
 import dagger.Module
