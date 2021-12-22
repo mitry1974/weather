@@ -5,5 +5,24 @@
     <string name="find_location_by_gps">Найти место по GPS координатам</string>
     <string name="cant_load_cities_list">Не удалось получить список городов</string>
     <string name="find_location">Найти месторасположение</string>
-    <string name="refresh_forecast_description">Обновить прогноз погоды</string>
+    <string name="reload_data">Обновить прогноз погоды</string>
+    <string name="error_load_weather">Не удалось получить информацию о погоде, попробуйте позже</string>
+    <string name="error_forecast_loading">Не удалось получить прогноз погоды. Попробуйте пожалуйста позже.</string>
+    <string name="error_city_status_changing">Ошибка изменения статуса объекта</string>
+    <string name="error_find_location_by_GPS">Не удалось получить название города по GPS координатам</string>
+    <string name="error_load_cities_list">Ошибка загрузки списка городов. Пожалуйста попробуйте повторить позже.</string>
+    <string name="notification_loading_cities_list">Выполняется загрузка списка городов</string>
+    <string name="notification_get_gps_coordinates">Выполняется получение GPS координат</string>
+    <string name="notification_got_gps_coordinates">Получены GPS координаты</string>
+    <string name="notification_added_to_favorites">Добавлено в избранное</string>
+    <string name="notification_removed_from_favorites">Removed from favorites</string>
+    <string name="forecast_activity_caption">Прогноз погоды для</string>
+    <string name="temperature_weather_element">температура</string>
+    <string name="temperature_weather_element1">температура</string>
+    <string name="humidity_weather_element">влажность</string>
+    <string name="clouds_weather_element">облачность</string>
+    <string name="pressure_weather_element">давление</string>
+    <string name="wind_weather_element">ветер</string>
+    <string name="message_cities_list_empty">Список городов пуст</string>
+
 </resources>

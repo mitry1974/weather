@@ -18,7 +18,7 @@ class WeatherItemsAdapterHorizontal:
 
     class WeatherItemsViewHolder(private val binding: ItemWeatherElementListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(itemData: BaseWeatherInfo.WeatherItem) {
-            binding.weatherItemCaption.text = itemData.key
+            binding.weatherItemCaption.text = binding.weatherItemCaption.context.getString(itemData.keyId)
             binding.weatherItemValue.text = itemData.value
             binding.weatherElementImage.setImageResource(itemData.icon)
         }

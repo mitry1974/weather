@@ -4,6 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.weather.api.model.CityResponse
 
+data class CityNameResponse(val name: String, val country: String, val state: String)
+
 data class Coordinates(
     val lat: Double,
     val lon: Double,

@@ -33,6 +33,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             />
 
+        <ProgressBar
+            android:id="@+id/favorites_list_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
         <TextView
             android:id="@+id/favorites_status_view"
             android:layout_width="0dp"
@@ -45,7 +54,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="Список городов пуст" />
+            android:text="@string/message_cities_list_empty" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

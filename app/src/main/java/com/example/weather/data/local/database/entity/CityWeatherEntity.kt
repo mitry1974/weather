@@ -18,26 +18,26 @@ open class BaseWeatherInfo(
     val iconFileName: String?,
 ) {
     data class WeatherItem(
-        val key: String,
+        val keyId: Int,
         val value: String,
         val icon: Int
     )
     val propertiesList: List<WeatherItem?>
         get() = listOfNotNull(
             temp?.let {
-                WeatherItem("temp", temp.celsius(), R.mipmap.ic_temperature_background)
+                WeatherItem(R.string.temperature_weather_element1, temp.celsius(), R.mipmap.ic_temperature_background)
             },
             humidity?.let {
-                WeatherItem("humidity", humidity.percent(), R.mipmap.ic_humidity_background)
+                WeatherItem(R.string.humidity_weather_element, humidity.percent(), R.mipmap.ic_humidity_background)
             },
             pressure?.let {
-                WeatherItem("pressure", pressure.hpaInHg(), R.mipmap.ic_airpressure_background)
+                WeatherItem(R.string.pressure_weather_element, pressure.hpaInHg(), R.mipmap.ic_airpressure_background)
             },
             wind?.let {
-                WeatherItem("wind", wind.speed(), R.mipmap.ic_wind_background)
+                WeatherItem(R.string.wind_weather_element, wind.speed(), R.mipmap.ic_wind_background)
             },
             clouds?.let {
-                WeatherItem("clouds", clouds.percent(), R.mipmap.ic_clouds_background)
+                WeatherItem(R.string.clouds_weather_element, clouds.percent(), R.mipmap.ic_clouds_background)
             })
 
 }

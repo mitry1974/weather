@@ -1,18 +1,16 @@
 package com.example.weather.ui.main.findCity
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
-import com.example.weather.api.Result
-import com.example.weather.api.successed
 import com.example.weather.data.local.database.entity.CitiesListEntity
 import com.example.weather.data.repository.citiesList.CitiesListRepository
 import com.example.weather.data.repository.location.LocationRepository
+import com.example.weather.errors.WeatherException
+import com.example.weather.ui.common.WeatherViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,8 +20,8 @@ import javax.inject.Inject
 class FindCityViewModelWithPaging @Inject constructor(
     private val citiesListRepository: CitiesListRepository,
     private val locationRepository: LocationRepository,
-
-    ) : ViewModel() {
+    application: Application
+) : WeatherViewModel(application) {
     var query: String = ""
 
     fun getAllCities() =
@@ -38,9 +36,6 @@ class FindCityViewModelWithPaging @Inject constructor(
     private val _isGPSGetting = MutableLiveData<Boolean>()
     val isGPSGetting: LiveData<Boolean> = _isGPSGetting
 
-    private val _toastError = MutableLiveData<String>()
-    val toastError: LiveData<String> = _toastError
-
     private val _cityOnChange = MutableLiveData<CitiesListEntity>()
     val cityOnChange: LiveData<CitiesListEntity> = _cityOnChange
 
@@ -52,10 +47,13 @@ class FindCityViewModelWithPaging @Inject constructor(
     @SuppressLint("NullSafeMutableLiveData")
     fun updateFavoriteStatus(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = citiesListRepository.updateFavoriteStatus(id)
-            when {
-                result is Result.Success && result.successed -> _cityOnChange.postValue(result.data)
-                result is Result.Error -> _toastError.postValue(result.message)
+            try {
+                val city = citiesListRepository.updateFavoriteStatus(id)
+                _cityOnChange.postValue(city)
+            } catch (e: WeatherException) {
+                postError(e.messageID)
+            } catch (e: java.lang.Exception) {
+                postError(e.message)
             }
         }
     }
@@ -63,27 +61,52 @@ class FindCityViewModelWithPaging @Inject constructor(
     @SuppressLint("NullSafeMutableLiveData")
     fun getLocationByCoordinates(lat: Double, lon: Double) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = citiesListRepository.getCityNameByCoordinates(lat, lon)
-            when {
-                result is Result.Success && result.successed -> _homeCityName.postValue(result.data)
-                result is Result.Error -> _toastError.postValue(result.message)
+            try {
+                val cityName = citiesListRepository.getCityNameByCoordinates(lat, lon)
+                println("2 - $cityName")
+                _homeCityName.postValue(cityName)
+                println("3")
+            } catch (e: WeatherException) {
+                postError(e.messageID)
+            } catch (e: java.lang.Exception) {
+                postError(e.message)
             }
         }
     }
 
     fun getLocation() {
-        _isGPSGetting.postValue(true)
-        locationRepository.getLocation()
-        _isGPSGetting.postValue(false)
+        try {
+            _isGPSGetting.postValue(true)
+            locationRepository.getLocation()
+            _isGPSGetting.postValue(false)
+        } catch (e: WeatherException) {
+            postError(e.messageID)
+        } catch (e: java.lang.Exception) {
+            postError(e.message)
+        }
     }
 
-    fun checkFirstRunAndLoadData() {
+    fun checkFirstRunAndLoadCitiesList() {
+        if (citiesListRepository.isFirstRun()) {
+            loadCitiesList()
+        }
+    }
+
+    fun loadCitiesList() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (citiesListRepository.isFirstRun()) {
+            try {
                 _isLoading.postValue(true)
                 citiesListRepository.loadCitiesList()
+                citiesListRepository.setFirstRun(false)
+            } catch (e: WeatherException) {
+                postError(e.messageID)
+            } catch (e: java.lang.Exception) {
+                postError(e.message)
+            } finally {
                 _isLoading.postValue(false)
             }
         }
     }
+
+
 }

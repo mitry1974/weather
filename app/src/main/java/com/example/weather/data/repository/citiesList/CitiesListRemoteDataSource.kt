@@ -3,7 +3,7 @@ package com.example.weather.data.repository.citiesList
 import com.example.weather.api.ApiInterface
 import com.example.weather.api.BaseRemoteDataSource
 import com.example.weather.api.Result
-import com.example.weather.api.model.CityNameResponse
+import com.example.weather.data.local.database.entity.CityNameResponse
 import okhttp3.ResponseBody
 import javax.inject.Inject
 

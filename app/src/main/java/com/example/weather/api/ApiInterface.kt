@@ -1,6 +1,7 @@
 package com.example.weather.api
 
 import com.example.weather.api.model.*
+import com.example.weather.data.local.database.entity.CityNameResponse
 import com.example.weather.util.Constants
 import okhttp3.ResponseBody
 import retrofit2.Response

@@ -1,10 +1,28 @@
 <resources>
     <string name="app_name">Weather</string>
     <string name="title_favorites_weather">Favorite cities</string>
-    <string name="find_location_by_gps">Найти место по GPS координатам</string>
-    <string name="cant_load_cities_list">Не удалось получить список городов</string>
+    <string name="find_location_by_gps">Find location by GPS coordinates</string>
+    <string name="cant_load_cities_list">Can\'t load cities list</string>
     <string name="find_location">Find location</string>
     <string name="URL_ICONS" translatable="false">https://openweathermap.org/img/wn/{icon}@2x.png</string>
-    <string name="refresh_forecast_description">Обновить прогноз погоды</string>
+    <string name="reload_data">Загрузить еще раз</string>
+    <string name="error_load_weather">Weather information loading error. Please, try again a bit later</string>
+    <string name="error_forecast_loading">Can\' obtain city forecast. Please, try again later</string>
+    <string name="error_city_status_changing">Error changing city status</string>
+    <string name="error_find_location_by_GPS">Can\'t get city name by GPS coordinates</string>
+    <string name="error_load_cities_list">Can\'t load cities list. Please try again later.</string>
+    <string name="notification_loading_cities_list">Выполняется загрузка списка городов</string>
+    <string name="notification_get_gps_coordinates">Выполняется получение GPS координат</string>
+    <string name="notification_got_gps_coordinates">Got GPS coordinates</string>
+    <string name="notification_added_to_favorites">Added to favorites</string>
+    <string name="notification_removed_from_favorites">Removed from favorites</string>
+    <string name="forecast_activity_caption">Forecast for</string>
+    <string name="temperature_weather_element">Temperature</string>
+    <string name="temperature_weather_element1">temperature</string>
+    <string name="humidity_weather_element">humidity</string>
+    <string name="pressure_weather_element">pressure</string>
+    <string name="wind_weather_element">wind</string>
+    <string name="clouds_weather_element">clouds</string>
+    <string name="message_cities_list_empty">Cities list empty</string>
     <!-- Strings used for fragments for navigation -->
 </resources>

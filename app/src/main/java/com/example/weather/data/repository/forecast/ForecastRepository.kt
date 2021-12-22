@@ -1,5 +1,7 @@
 package com.example.weather.data.repository.forecast
 
+import android.content.res.Resources
+import com.example.weather.R
 import com.example.weather.api.Result
 import com.example.weather.api.model.CityForecastResponse
 import com.example.weather.api.successed
@@ -8,6 +10,7 @@ import com.example.weather.data.local.database.ForecastRow
 import com.example.weather.data.local.iconsStorage.WeatherIconsStorage
 import com.example.weather.data.repository.citiesList.CitiesListLocalDataSource
 import com.example.weather.data.repository.citiesWeather.WeatherRemoteDataSource
+import com.example.weather.errors.WeatherException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -70,10 +73,12 @@ class ForecastRepository @Inject constructor(
                 entity
             }
             else -> {
-                if (result is Result.Error) {
-                    println(result.message)
+                val entity = localCityForecastDataSource.getCityForecastById(id)
+                if(entity != null) {
+                    entity
+                } else {
+                    throw WeatherException(R.string.error_forecast_loading)
                 }
-                return localCityForecastDataSource.getCityForecastById(id)
             }
         }
     }

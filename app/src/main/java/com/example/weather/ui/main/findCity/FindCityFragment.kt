@@ -3,18 +3,17 @@ package com.example.weather.ui.main.findCity
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weather.R
 import com.example.weather.databinding.FragmentFindCityBinding
 import com.example.weather.ui.adapters.CitiesListPagingAdapter
 import com.example.weather.ui.adapters.OnItemClickCallback
@@ -22,16 +21,20 @@ import com.example.weather.ui.common.MainNavigationFragment
 import com.example.weather.util.doOnChange
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.*
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class FindCityFragment: MainNavigationFragment(), OnItemClickCallback {
+class FindCityFragment : MainNavigationFragment(), OnItemClickCallback {
     private val viewModel: FindCityViewModelWithPaging by viewModels()
     private lateinit var binding: FragmentFindCityBinding
     private val citiesListAdapter = CitiesListPagingAdapter(this)
 
     private lateinit var requestMultiplePermissionLauncher: ActivityResultLauncher<Array<String>>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +46,8 @@ class FindCityFragment: MainNavigationFragment(), OnItemClickCallback {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel = this@FindCityFragment.viewModel
             }
+
+        (activity as AppCompatActivity?)?.setSupportActionBar(binding.toolbar)
 
         requestMultiplePermissionLauncher = registerPermissionsLauncher()
 
@@ -57,9 +62,7 @@ class FindCityFragment: MainNavigationFragment(), OnItemClickCallback {
 
             if (it) {
                 binding.citiesListErrorView.visibility = View.GONE
-                showToast("Выполняется загрузка списка городов")
-            } else {
-                showToast("Список городов загружен")
+                showToast(getString(R.string.notification_loading_cities_list))
             }
         }
 
@@ -67,9 +70,9 @@ class FindCityFragment: MainNavigationFragment(), OnItemClickCallback {
             binding.citiesListLoading.visibility = if (it) View.VISIBLE else View.GONE
             if (it) {
                 binding.citiesListErrorView.visibility = View.GONE
-                showToast("Выполняется получение GPS координат")
+                showToast(getString(R.string.notification_get_gps_coordinates))
             } else {
-                showToast("GPS координаты получены")
+                showToast(getString(R.string.notification_got_gps_coordinates))
             }
         }
 
@@ -80,8 +83,8 @@ class FindCityFragment: MainNavigationFragment(), OnItemClickCallback {
         viewModel.cityOnChange.doOnChange(this) {
             it.let {
                 showToast(
-                    if (it.isFavorite) "${it.name} добавлен в избранное"
-                    else "${it.name} удален из избранного"
+                    if (it.isFavorite) "${it.name} ${getString(R.string.notification_added_to_favorites)}"
+                    else "${it.name} ${getString(R.string.notification_removed_from_favorites)}"
                 )
             }
         }
@@ -95,12 +98,17 @@ class FindCityFragment: MainNavigationFragment(), OnItemClickCallback {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.reload_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initializeView()
 
-        viewModel.checkFirstRunAndLoadData()
+        viewModel.checkFirstRunAndLoadCitiesList()
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.getAllCities().collectLatest {
@@ -144,19 +152,24 @@ class FindCityFragment: MainNavigationFragment(), OnItemClickCallback {
         viewModel.updateFavoriteStatus(id)
     }
 
-    override fun onItemClick(cityName:String, cityID: Int) {}
+    override fun onItemClick(cityName: String, cityID: Int) {}
 
     private fun showToast(message: String, duration: Int = Toast.LENGTH_SHORT) =
         Toast.makeText(context, message, duration).show()
 
+    private fun showToast(messageId: Int, duration: Int = Toast.LENGTH_SHORT) =
+        Toast.makeText(context, getString(messageId), duration).show()
+
     private fun checkLocationPermissions() =
-        ActivityCompat.checkSelfPermission(
-            context!!,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-            context!!,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
+        context?.let {
+            ActivityCompat.checkSelfPermission(
+                it,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                it,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        } ?: false
 
     private fun registerPermissionsLauncher(): ActivityResultLauncher<Array<String>> {
         return registerForActivityResult(
@@ -177,6 +190,14 @@ class FindCityFragment: MainNavigationFragment(), OnItemClickCallback {
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
         )
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_refresh_reload -> viewModel.loadCitiesList()
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
 }

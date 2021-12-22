@@ -28,7 +28,7 @@
             android:id="@+id/weather_item_caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Temperature"
+            android:text="@string/temperature_weather_element"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/weather_element_image"

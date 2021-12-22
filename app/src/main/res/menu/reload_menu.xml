@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_refresh_forecast"
+        android:id="@+id/action_refresh_reload"
         android:icon="@drawable/ic_baseline_refresh"
-        android:title="@string/refresh_forecast_description"
+        android:title="@string/reload_data"
         app:showAsAction="always"/>
 </menu>

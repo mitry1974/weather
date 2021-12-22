@@ -2,8 +2,6 @@ package com.example.weather.api.model
 
 import com.google.gson.annotations.SerializedName
 
-data class CityNameResponse(val name: String)
-
 data class CityForecastResponse(
 
 //    @field:SerializedName("city")
@@ -60,6 +58,7 @@ data class WeatherItem(
     @field:SerializedName("id")
     val id: Int? = null
 )
+
 data class CityWeatherResponse(
     @field:SerializedName("id")
     val id: Int? = null,
@@ -84,7 +83,7 @@ data class CityWeatherResponse(
 
     @field:SerializedName("clouds")
     val clouds: Clouds? = null,
-    )
+)
 
 data class CityResponse(
 

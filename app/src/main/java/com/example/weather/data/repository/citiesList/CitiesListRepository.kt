@@ -1,13 +1,14 @@
 package com.example.weather.data.repository.citiesList
 
+import android.content.res.Resources
+import com.example.weather.R
 import com.example.weather.api.Result
-import com.example.weather.api.Result.Success
-import com.example.weather.api.model.CityNameResponse
 import com.example.weather.api.model.CityResponse
 import com.example.weather.api.successed
 import com.example.weather.data.local.database.entity.CitiesListEntity
+import com.example.weather.data.local.database.entity.CityNameResponse
 import com.example.weather.data.local.preferences.PreferenceStorage
-import com.example.weather.util.Constants
+import com.example.weather.errors.WeatherException
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 import java.io.InputStream
@@ -31,58 +32,52 @@ class CitiesListRepository @Inject constructor(
         citiesListLocalDataSource.getCitiesListPagedFiltered(query)
 
     suspend fun loadCitiesList() {
-        when (val result = citiesListRemoteDataSource.loadCitiesListFile()) {
-            is Success -> {
-                if (result.successed) {
-                    val cities = withContext(Dispatchers.IO) {
-                        getCitiesFromZipStream(result.data.byteStream())
-                    }
-                    val favoriteIds = withContext(Dispatchers.IO) {
-                        citiesListLocalDataSource.favoriteIds()
-                    }
-                    val customCitiesList = cities
-                        .filter { item -> item.id != 0 }
-                        .map { city ->
-                            CitiesListEntity(
-                                city,
-                                favoriteIds.contains(city.id)
-                            )
-                        }
-
-                    citiesListLocalDataSource.insertCitiesIntoDatabase(customCitiesList)
-                    Success(true)
-                } else {
-                    Result.Error(Constants.GENERIC_ERROR)
+        val result = citiesListRemoteDataSource.loadCitiesListFile()
+        when {
+            result is Result.Success && result.successed -> {
+                val cities = withContext(Dispatchers.IO) {
+                    getCitiesFromZipStream(result.data.byteStream())
                 }
+                val favoriteIds = withContext(Dispatchers.IO) {
+                    citiesListLocalDataSource.favoriteIds()
+                }
+                val customCitiesList = cities
+                    .filter { item -> item.id != 0 }
+                    .map { city ->
+                        println(city)
+                        CitiesListEntity(
+                            city,
+                            favoriteIds.contains(city.id)
+                        )
+                    }
+
+                citiesListLocalDataSource.insertCitiesIntoDatabase(customCitiesList)
             }
-            else -> result as Result.Error
+            else -> {
+                throw WeatherException(R.string.error_load_cities_list)
+            }
         }
     }
 
-    suspend fun getCityNameByCoordinates(lat: Double, lon: Double): Result<String> {
+    suspend fun getCityNameByCoordinates(lat: Double, lon: Double): String {
         val result = citiesListRemoteDataSource.loadCityNamesByCoordinates(lat, lon)
         return when {
-            result is Result.Error -> result
-            result is Success<*> && !result.successed -> Result.Error(Constants.GENERIC_ERROR)
-            else -> {
-                val citiesNames: List<CityNameResponse> = (result as Success).data
+            result is Result.Success<*> && result.successed -> {
+                val citiesNames: List<CityNameResponse> = (result as Result.Success).data
                 val name = if (citiesNames.size == 1) citiesNames[0].name else ""
-                Success(name)
+                name
             }
+            else -> throw WeatherException(R.string.error_find_location_by_GPS)
         }
     }
 
-    suspend fun updateFavoriteStatus(id: Int): Result<CitiesListEntity> {
-        val result = citiesListLocalDataSource.updateFavoriteStatus(id)
-        return result?.let {
-            Success(it)
-        } ?: Result.Error(Constants.GENERIC_ERROR)
-    }
+    suspend fun updateFavoriteStatus(id: Int): CitiesListEntity =
+        citiesListLocalDataSource.updateFavoriteStatus(id)
+            ?: throw WeatherException(R.string.error_city_status_changing)
 
     fun isFirstRun(): Boolean {
-        val result = preferenceStorage.isFirstRun
-        preferenceStorage.isFirstRun = false
-        return result
+        return preferenceStorage.isFirstRun
     }
 
+    fun setFirstRun(value: Boolean) = run { preferenceStorage.isFirstRun = value }
 }
