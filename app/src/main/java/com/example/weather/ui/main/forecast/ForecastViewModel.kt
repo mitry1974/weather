@@ -1,11 +1,9 @@
 package com.example.weather.ui.main.forecast
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weather.data.local.database.CityForecastEntity
+import com.example.weather.data.local.database.entity.CityForecastEntity
 import com.example.weather.data.repository.forecast.ForecastRepository
 import com.example.weather.errors.WeatherException
 import com.example.weather.ui.common.WeatherViewModel

@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weather.R
-import com.example.weather.data.local.database.ForecastRow
+import com.example.weather.data.local.database.entity.ForecastRow
 import com.example.weather.databinding.ItemCitiesListNewBinding
 import com.example.weather.ui.common.DiffCallBack
 import com.example.weather.util.ImageLoader

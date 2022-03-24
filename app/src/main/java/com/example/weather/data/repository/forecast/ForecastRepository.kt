@@ -1,12 +1,11 @@
 package com.example.weather.data.repository.forecast
 
-import android.content.res.Resources
 import com.example.weather.R
 import com.example.weather.api.Result
 import com.example.weather.api.model.CityForecastResponse
 import com.example.weather.api.successed
-import com.example.weather.data.local.database.CityForecastEntity
-import com.example.weather.data.local.database.ForecastRow
+import com.example.weather.data.local.database.entity.CityForecastEntity
+import com.example.weather.data.local.database.entity.ForecastRow
 import com.example.weather.data.local.iconsStorage.WeatherIconsStorage
 import com.example.weather.data.repository.citiesList.CitiesListLocalDataSource
 import com.example.weather.data.repository.citiesWeather.WeatherRemoteDataSource
@@ -53,9 +52,6 @@ class ForecastRepository @Inject constructor(
 
         return CityForecastEntity(
             id = cityId,
-//            temp = response.list?.first()?.main?.temp,
-//            icon = response.list?.first()?.weather?.first()?.icon,
-//            time = response.list?.first()?.dtTxt,
             forecastRows = forecastRows
         )
     }

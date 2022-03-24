@@ -8,6 +8,7 @@ import com.example.weather.data.local.database.dao.CitiesListDao
 import com.example.weather.data.local.database.dao.CityForecastDao
 import com.example.weather.data.local.database.dao.CityWeatherDao
 import com.example.weather.data.local.database.entity.CitiesListEntity
+import com.example.weather.data.local.database.entity.CityForecastEntity
 import com.example.weather.data.local.database.entity.CityWeatherEntity
 
 @Database(
